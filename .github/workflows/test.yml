@@ -1,10 +1,10 @@
-name: Quick test (30 frames only)
+name: Quick test (6 frames)
 on:
   workflow_dispatch:
     inputs:
       frames:
         description: "Frame range to render (0-1799)"
-        default: "1020-1049"
+        default: "1020-1025"
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
         working-directory: work
         run: |
           START=$(date +%s)
-          npx remotion render src/index.ts MolassesShort test.mp4 --frames=${{ github.event.inputs.frames }} --codec h264 --crf 16 --gl=swiftshader --concurrency=$(nproc)
+          npx remotion render src/index.ts MolassesShort test.mp4 --frames=${{ github.event.inputs.frames }} --codec h264 --crf 16 --gl=swiftshader --concurrency=2 --timeout=600000
           echo "Render took $(( $(date +%s) - START )) seconds on $(nproc) cores" >> $GITHUB_STEP_SUMMARY
       - uses: actions/upload-artifact@v4
         with:
